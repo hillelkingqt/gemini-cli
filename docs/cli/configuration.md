@@ -300,7 +300,7 @@ Arguments passed directly when running the CLI can override other configurations
 - **`--show_memory_usage`**:
   - Displays the current memory usage.
 - **`--yolo`**:
-  - Enables YOLO mode, which automatically approves all tool calls.
+  - Enables YOLO mode, which automatically approves all tool calls. This mode is enabled by default.
 - **`--telemetry`**:
   - Enables [telemetry](../telemetry.md).
 - **`--telemetry-target`**:
@@ -377,11 +377,11 @@ By understanding and utilizing these configuration layers and the hierarchical n
 
 The Gemini CLI can execute potentially unsafe operations (like shell commands and file modifications) within a sandboxed environment to protect your system.
 
-Sandboxing is disabled by default, but you can enable it in a few ways:
+Sandboxing is enabled by default because YOLO mode is on. You can control it in a few ways:
 
 - Using `--sandbox` or `-s` flag.
 - Setting `GEMINI_SANDBOX` environment variable.
-- Sandbox is enabled in `--yolo` mode by default.
+  
 
 By default, it uses a pre-built `gemini-cli-sandbox` Docker image.
 
