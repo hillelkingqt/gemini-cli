@@ -176,7 +176,7 @@ export async function main() {
   // Render UI if in interactive mode with an initial prompt
   if (process.stdin.isTTY && interactivePrompt) {
     if (settings.merged.selectedAuthType) {
-      // Validate authentication here because the sandbox will interfere with the Oauth2 web redirect.
+
       try {
         const err = validateAuthMethod(settings.merged.selectedAuthType);
         if (err) {
