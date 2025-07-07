@@ -287,6 +287,9 @@ Arguments passed directly when running the CLI can override other configurations
   - Example: `npm start -- --model gemini-1.5-pro-latest`
 - **`--prompt <your_prompt>`** (**`-p <your_prompt>`**):
   - Used to pass a prompt directly to the command. This invokes Gemini CLI in a non-interactive mode.
+- **`--message <initial_prompt>`** (**`-i <initial_prompt>`**):
+  - Opens the interactive UI with the provided prompt already filled in.
+  - The message is automatically submitted when the interface loads.
 - **`--sandbox`** (**`-s`**):
   - Enables sandbox mode for this session.
 - **`--sandbox-image`**:
