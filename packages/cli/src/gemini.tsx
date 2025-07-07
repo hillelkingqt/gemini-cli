@@ -175,6 +175,18 @@ export async function main() {
 
   // Render UI if in interactive mode with an initial prompt
   if (process.stdin.isTTY && interactivePrompt) {
+    if (settings.merged.selectedAuthType) {
+      try {
+        const err = validateAuthMethod(settings.merged.selectedAuthType);
+        if (err) {
+          throw new Error(err);
+        }
+        await config.refreshAuth(settings.merged.selectedAuthType);
+      } catch (err) {
+        console.error('Error authenticating:', err);
+        process.exit(1);
+      }
+    }
     setWindowTitle(basename(workspaceRoot), settings);
     render(
       <React.StrictMode>
