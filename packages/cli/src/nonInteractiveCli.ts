@@ -87,7 +87,6 @@ export async function runNonInteractive(
           process.stdout.write(textPart);
           await sendToTelegram(textPart);
         }
-          }
         if (resp.functionCalls) {
           functionCalls.push(...resp.functionCalls);
         }
