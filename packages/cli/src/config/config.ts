@@ -34,12 +34,13 @@ const logger = {
   error: (...args: any[]) => console.error('[ERROR]', ...args),
 };
 
-interface CliArgs {
+export interface CliArgs {
   model: string | undefined;
   sandbox: boolean | string | undefined;
   'sandbox-image': string | undefined;
   debug: boolean | undefined;
   prompt: string | undefined;
+  message: string | undefined;
   all_files: boolean | undefined;
   show_memory_usage: boolean | undefined;
   yolo: boolean | undefined;
@@ -50,7 +51,7 @@ interface CliArgs {
   telemetryLogPrompts: boolean | undefined;
 }
 
-async function parseArguments(): Promise<CliArgs> {
+export async function parseArguments(): Promise<CliArgs> {
   const argv = await yargs(hideBin(process.argv))
     .option('model', {
       alias: 'm',
@@ -62,6 +63,12 @@ async function parseArguments(): Promise<CliArgs> {
       alias: 'p',
       type: 'string',
       description: 'Prompt. Appended to input on stdin (if any).',
+    })
+    .option('message', {
+      alias: 'i',
+      type: 'string',
+      description:
+        'Send this message automatically in interactive mode (opens UI).',
     })
     .option('sandbox', {
       alias: 's',
@@ -128,6 +135,10 @@ async function parseArguments(): Promise<CliArgs> {
     .help()
     .alias('h', 'help')
     .strict().argv;
+
+  if (!argv.message && Array.isArray(argv._) && argv._.length > 0) {
+    argv.message = argv._.join(' ');
+  }
 
   return argv;
 }

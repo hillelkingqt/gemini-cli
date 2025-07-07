@@ -79,6 +79,7 @@ interface AppProps {
   config: Config;
   settings: LoadedSettings;
   startupWarnings?: string[];
+  initialPrompt?: string;
 }
 
 export const AppWrapper = (props: AppProps) => (
@@ -87,7 +88,12 @@ export const AppWrapper = (props: AppProps) => (
   </SessionStatsProvider>
 );
 
-const App = ({ config, settings, startupWarnings = [] }: AppProps) => {
+const App = ({
+  config,
+  settings,
+  startupWarnings = [],
+  initialPrompt,
+}: AppProps) => {
   useBracketedPaste();
   const [updateMessage, setUpdateMessage] = useState<string | null>(null);
   const { stdout } = useStdout();
@@ -435,6 +441,13 @@ const App = ({ config, settings, startupWarnings = [] }: AppProps) => {
     },
     [submitQuery],
   );
+
+  useEffect(() => {
+    if (initialPrompt) {
+      handleFinalSubmit(initialPrompt);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const logger = useLogger();
   const [userMessages, setUserMessages] = useState<string[]>([]);
