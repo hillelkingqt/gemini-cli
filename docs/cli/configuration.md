@@ -381,7 +381,6 @@ Sandboxing is enabled by default because YOLO mode is on. You can control it in 
 
 - Using `--sandbox` or `-s` flag.
 - Setting `GEMINI_SANDBOX` environment variable.
-  
 
 By default, it uses a pre-built `gemini-cli-sandbox` Docker image.
 

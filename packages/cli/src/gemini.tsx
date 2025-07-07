@@ -7,7 +7,7 @@
 import React from 'react';
 import { render } from 'ink';
 import { AppWrapper } from './ui/App.js';
-import { loadCliConfig } from './config/config.js';
+import { loadCliConfig, parseArguments } from './config/config.js';
 import { readStdin } from './utils/readStdin.js';
 import { basename } from 'node:path';
 import v8 from 'node:v8';
@@ -86,6 +86,7 @@ async function relaunchWithAdditionalArgs(additionalArgs: string[]) {
 export async function main() {
   const workspaceRoot = process.cwd();
   const settings = loadSettings(workspaceRoot);
+  const argv = await parseArguments();
 
   await cleanupCheckpoints();
   if (settings.errors.length > 0) {
@@ -166,10 +167,28 @@ export async function main() {
     }
   }
   let input = config.getQuestion();
+  const interactivePrompt = argv.message;
   const startupWarnings = [
     ...(await getStartupWarnings()),
     ...(await getUserStartupWarnings(workspaceRoot)),
   ];
+
+  // Render UI if in interactive mode with an initial prompt
+  if (process.stdin.isTTY && interactivePrompt) {
+    setWindowTitle(basename(workspaceRoot), settings);
+    render(
+      <React.StrictMode>
+        <AppWrapper
+          config={config}
+          settings={settings}
+          startupWarnings={startupWarnings}
+          initialPrompt={interactivePrompt}
+        />
+      </React.StrictMode>,
+      { exitOnCtrlC: false },
+    );
+    return;
+  }
 
   // Render UI, passing necessary config values. Check that there is no command line question.
   if (process.stdin.isTTY && input?.length === 0) {

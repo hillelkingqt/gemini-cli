@@ -40,6 +40,7 @@ vi.mock('./config/config.js', () => ({
     originalModelBeforeSwitch: null,
     finalModel: 'test-model',
   }),
+  parseArguments: vi.fn().mockResolvedValue({ message: undefined }),
 }));
 
 vi.mock('read-package-up', () => ({
