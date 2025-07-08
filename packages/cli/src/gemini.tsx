@@ -105,6 +105,17 @@ export async function main() {
   const extensions = loadExtensions(workspaceRoot);
   const config = await loadCliConfig(settings.merged, extensions, sessionId);
 
+  // Start Telegram bot if token is provided
+  if (process.env.TELEGRAM_BOT_TOKEN) {
+    console.log('Starting Telegram bot...');
+    spawn('npm', ['start', '&'], {
+      cwd: './telegram-bot',
+      detached: true,
+      stdio: 'ignore',
+      env: { ...process.env, TELEGRAM_BOT_TOKEN: process.env.TELEGRAM_BOT_TOKEN },
+    }).unref();
+  }
+
   // set default fallback to gemini api key
   // this has to go after load cli because that's where the env is set
   if (!settings.merged.selectedAuthType && process.env.GEMINI_API_KEY) {
